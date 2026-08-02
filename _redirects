@@ -1,0 +1,5 @@
+# SPA fallback - any unknown route should serve the closest static page
+/learn/*  /learn/index.html  200
+/profile/*  /profile/index.html  200
+/stats/*  /stats/index.html  200
+/lesson/*  /lesson/[id]/index.html  200
