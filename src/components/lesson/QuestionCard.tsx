@@ -54,8 +54,17 @@ export function QuestionCard({ question, questionNumber, totalQuestions, hearts,
       case "true-false":
         return booleanAnswer === question.correctBoolean;
       case "fill-blank": {
-        const ans = textAnswer.trim().toLowerCase();
-        const correct = (question.blankAnswer || "").trim().toLowerCase();
+        // Compare normalized: lowercase + remove all whitespace + remove diacritics.
+        // This way "lam phat" / "lamphat" / "lạm phát" all match "lạm phát".
+        const normalize = (s: string) =>
+          s
+            .trim()
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\s+/g, "");
+        const ans = normalize(textAnswer);
+        const correct = normalize(question.blankAnswer || "");
         return ans === correct;
       }
       case "match-pairs": {
