@@ -58,15 +58,23 @@ export type UnitColor =
   | "red"
   | "blue"
   | "purple"
-  | "orange";
+  | "orange"
+  | "emerald"
+  | "stone"
+  | "amber"
+  | "rose";
 
 export const unitColorMap: Record<UnitColor, { bg: string; border: string; text: string; light: string }> = {
-  green:  { bg: "bg-duolingo-green",  border: "border-duolingo-green-dark",  text: "text-duolingo-green-dark",  light: "bg-duolingo-green/15"  },
-  gold:   { bg: "bg-duolingo-gold",   border: "border-duolingo-gold-dark",   text: "text-duolingo-gold-dark",   light: "bg-duolingo-gold/15"   },
-  red:    { bg: "bg-duolingo-red",    border: "border-duolingo-red-dark",    text: "text-duolingo-red-dark",    light: "bg-duolingo-red/15"    },
-  blue:   { bg: "bg-duolingo-blue",   border: "border-duolingo-blue-dark",   text: "text-duolingo-blue-dark",   light: "bg-duolingo-blue/15"   },
-  purple: { bg: "bg-duolingo-purple", border: "border-duolingo-purple",      text: "text-duolingo-purple",      light: "bg-duolingo-purple/15" },
-  orange: { bg: "bg-duolingo-orange", border: "border-duolingo-orange-dark", text: "text-duolingo-orange-dark", light: "bg-duolingo-orange/15" },
+  green:   { bg: "bg-duolingo-green",   border: "border-duolingo-green-dark",   text: "text-duolingo-green-dark",   light: "bg-duolingo-green/15"   },
+  gold:    { bg: "bg-duolingo-gold",    border: "border-duolingo-gold-dark",    text: "text-duolingo-gold-dark",    light: "bg-duolingo-gold/15"    },
+  red:     { bg: "bg-duolingo-red",     border: "border-duolingo-red-dark",     text: "text-duolingo-red-dark",     light: "bg-duolingo-red/15"     },
+  blue:    { bg: "bg-duolingo-blue",    border: "border-duolingo-blue-dark",    text: "text-duolingo-blue-dark",    light: "bg-duolingo-blue/15"    },
+  purple:  { bg: "bg-duolingo-purple",  border: "border-duolingo-purple",       text: "text-duolingo-purple",       light: "bg-duolingo-purple/15"  },
+  orange:  { bg: "bg-duolingo-orange",  border: "border-duolingo-orange-dark",  text: "text-duolingo-orange-dark",  light: "bg-duolingo-orange/15"  },
+  emerald: { bg: "bg-emerald-500",      border: "border-emerald-600",           text: "text-emerald-600",           light: "bg-emerald-100"         },
+  stone:   { bg: "bg-stone-500",        border: "border-stone-600",             text: "text-stone-600",             light: "bg-stone-100"           },
+  amber:   { bg: "bg-amber-500",        border: "border-amber-600",             text: "text-amber-600",             light: "bg-amber-100"           },
+  rose:    { bg: "bg-rose-500",         border: "border-rose-600",              text: "text-rose-600",              light: "bg-rose-100"            },
 };
 
 export interface UserProfile {
