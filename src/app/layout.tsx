@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Cú Đầu Tư — Học tài chính cá nhân mỗi ngày",
-    description: "Gamified personal finance learning for Vietnamese. 61 bài học qua 12 units (BĐS VN, crypto, tâm lý tài chính), streak, leaderboard, 100% miễn phí.",
+    description: "Gamified personal finance learning for Vietnamese. 83 bài học qua 15 units (bảo hiểm, bẫy tài chính, đầu tư thực chiến VN), streak, leaderboard, 100% miễn phí.",
     type: "website",
     locale: "vi_VN",
     siteName: "Cú Đầu Tư",

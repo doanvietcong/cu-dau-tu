@@ -148,7 +148,7 @@ export default function ProfilePage() {
           <ProgressBar value={completionPct} color="green" />
         </div>
         <div className="mt-3 grid grid-cols-4 gap-1.5">
-          {UNITS.slice(0, 8).map((u) => {
+          {UNITS.slice(0, 12).map((u) => {
             const done = u.lessonIds.filter((id) => user.completedLessonIds.includes(id)).length;
             const total = u.lessonIds.length;
             const allDone = done === total;
