@@ -1,0 +1,49 @@
+{
+  "name": "Cú Đầu Tư — Học tài chính cá nhân",
+  "short_name": "Cú Đầu Tư",
+  "description": "Học tài chính cá nhân theo phong cách Duolingo. 100% cho người Việt.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F7F7F7",
+  "theme_color": "#58CC02",
+  "lang": "vi",
+  "categories": ["education", "finance", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Học ngay",
+      "url": "/learn",
+      "description": "Mở lộ trình học"
+    },
+    {
+      "name": "Bảng xếp hạng",
+      "url": "/leaderboard",
+      "description": "Xem BXH tuần"
+    },
+    {
+      "name": "Công cụ tài chính",
+      "url": "/tools",
+      "description": "Tính lãi kép, vay mua nhà, FIRE, thuế"
+    }
+  ]
+}

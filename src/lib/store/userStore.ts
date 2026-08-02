@@ -20,6 +20,7 @@ interface UserState {
   toggleMusic: () => void;
   setAvatar: (emoji: string) => void;
   setDisplayName: (name: string) => void;
+  _setWeakQuestions?: (ids: string[]) => void;
   // Internal
   _tickDaily: () => void;
 }
@@ -213,6 +214,12 @@ export const useUserStore = create<UserState>()(
         const u = get().user;
         if (!u) return;
         set({ user: { ...u, displayName: name } });
+      },
+
+      _setWeakQuestions: (ids) => {
+        const u = get().user;
+        if (!u) return;
+        set({ user: { ...u, weakQuestionIds: ids } });
       },
     }),
     {

@@ -1,0 +1,11 @@
+name = "cu-dau-tu-ai-tutor"
+main = "ai-tutor.ts"
+compatibility_date = "2024-01-01"
+
+# Set secret via:
+#   wrangler secret put OPENAI_API_KEY
+# hoặc:
+#   wrangler secret put ANTHROPIC_API_KEY
+
+[vars]
+ALLOWED_ORIGIN = "https://cu-dau-tu.pages.dev"

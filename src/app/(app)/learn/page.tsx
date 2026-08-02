@@ -7,7 +7,8 @@ import { useUserStore } from "@/lib/store/userStore";
 import { UNITS, LESSONS } from "@/data/curriculum";
 import { ProgressBar } from "@/components/ui/Progress";
 import { CuDauTu } from "@/components/mascot/CuDauTu";
-import { Lock, Star, Zap, CheckCircle2, Flame, Trophy } from "lucide-react";
+import { DailyTip } from "@/components/dashboard/DailyTip";
+import { Lock, Star, Zap, CheckCircle2, Flame, Trophy, Calculator, AlertCircle } from "lucide-react";
 
 export default function LearnPage() {
   const user = useUserStore((s) => s.user);
@@ -83,6 +84,41 @@ export default function LearnPage() {
           <CuDauTu size={80} mood={todayXp >= dailyGoal ? "celebrating" : "happy"} />
         </div>
       </motion.div>
+
+      {/* Daily tip + Tools link */}
+      <DailyTip />
+      <div className="grid grid-cols-2 gap-2">
+        <Link href="/tools" className="rounded-duo border-2 border-duolingo-blue-dark bg-white p-3 shadow-duo-card hover:bg-duolingo-blue/5">
+          <div className="flex items-center gap-2">
+            <Calculator className="text-duolingo-blue" size={20} />
+            <div>
+              <div className="text-sm font-extrabold text-duolingo-gray-5">Công cụ</div>
+              <div className="text-[10px] text-duolingo-gray-3">Lãi kép, vay, FIRE, thuế</div>
+            </div>
+          </div>
+        </Link>
+        <Link href="/tutor" className="rounded-duo border-2 border-duolingo-gold-dark bg-white p-3 shadow-duo-card hover:bg-duolingo-gold/5">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">💬</span>
+            <div>
+              <div className="text-sm font-extrabold text-duolingo-gray-5">Hỏi Cú</div>
+              <div className="text-[10px] text-duolingo-gray-3">Chat tài chính AI</div>
+            </div>
+          </div>
+        </Link>
+      </div>
+      {user && user.weakQuestionIds.length > 0 && (
+        <Link href="/review" className="block rounded-duo border-2 border-duolingo-red-dark bg-duolingo-red/5 p-3 shadow-duo-card">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="text-duolingo-red" size={20} />
+            <div className="flex-1">
+              <div className="text-sm font-extrabold text-duolingo-gray-5">Ôn tập câu sai</div>
+              <div className="text-[10px] text-duolingo-gray-3">{user.weakQuestionIds.length} câu đang chờ ôn lại</div>
+            </div>
+            <div className="text-xs font-extrabold text-duolingo-red-dark">→</div>
+          </div>
+        </Link>
+      )}
 
       {/* Next lesson CTA */}
       {nextLesson && (
