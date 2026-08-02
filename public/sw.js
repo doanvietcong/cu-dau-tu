@@ -1,8 +1,28 @@
 // Cú Đầu Tư — Service Worker
 // Cache-first strategy for static assets, network-first for HTML
 
-const CACHE_NAME = "cu-dau-tu-v1";
-const STATIC_CACHE = ["/", "/learn", "/leaderboard", "/profile", "/tools", "/manifest.json"];
+const CACHE_NAME = "cu-dau-tu-v2";
+// NOTE: Next.js `trailingSlash: true` means actual URLs end with "/".
+// Cache both forms so offline works regardless of how user typed the URL.
+const STATIC_CACHE = [
+  "/",
+  "/learn/",
+  "/leaderboard/",
+  "/profile/",
+  "/shop/",
+  "/stats/",
+  "/tools/",
+  "/tutor/",
+  "/review/",
+  "/auth/sign-in/",
+  "/auth/sign-up/",
+  "/onboarding/",
+  "/manifest.json",
+  "/icons/icon.svg",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png",
+  "/og-image.png",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -32,7 +52,22 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((c) => c.put(request, clone));
           return res;
         })
-        .catch(() => caches.match(request).then((r) => r || caches.match("/")))
+        .catch(async () => {
+          // Try exact match, then trailing-slash variant, then root.
+          const url = new URL(request.url);
+          const path = url.pathname;
+          const candidates = [request, path, path.endsWith("/") ? path : path + "/", path.endsWith("/") ? path.slice(0, -1) : path, "/learn/", "/"];
+          for (const c of candidates) {
+            if (typeof c === "string") {
+              const match = await caches.match(c);
+              if (match) return match;
+            } else {
+              const match = await caches.match(c);
+              if (match) return match;
+            }
+          }
+          return caches.match("/");
+        })
     );
     return;
   }

@@ -14,9 +14,10 @@ interface QuestionCardProps {
   hearts: number;
   onAnswer: (correct: boolean, userAnswer: string) => void;
   onContinue: () => void;
+  onExit: () => void;
 }
 
-export function QuestionCard({ question, questionNumber, totalQuestions, hearts, onAnswer, onContinue }: QuestionCardProps) {
+export function QuestionCard({ question, questionNumber, totalQuestions, hearts, onAnswer, onContinue, onExit }: QuestionCardProps) {
   const sfx = useSound();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [booleanAnswer, setBooleanAnswer] = useState<boolean | null>(null);
@@ -25,16 +26,16 @@ export function QuestionCard({ question, questionNumber, totalQuestions, hearts,
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  // Shuffled choices/pairs
+  // Shuffled choices/pairs (re-shuffle on every new question so users can't memorize order)
   const shuffledChoices = useMemo(() => {
     if (question.type !== "multiple-choice" || !question.choices) return [];
-    return question.choices;
-  }, [question]);
+    return shuffle(question.choices);
+  }, [question.id, question.type, question.choices]);
 
   const shuffledPairRights = useMemo(() => {
     if (question.type !== "match-pairs" || !question.pairs) return [];
     return shuffle(question.pairs.map((p) => p.right));
-  }, [question]);
+  }, [question.id, question.type, question.pairs]);
 
   // Reset state when question changes
   useEffect(() => {
@@ -107,7 +108,7 @@ export function QuestionCard({ question, questionNumber, totalQuestions, hearts,
     <div className="flex min-h-[500px] flex-col">
       {/* Top: progress + close + hearts */}
       <div className="mb-6 flex items-center gap-3">
-        <button onClick={onContinue} className="text-duolingo-gray-3 hover:text-duolingo-gray-5" aria-label="Đóng">
+        <button onClick={onExit} className="text-duolingo-gray-3 hover:text-duolingo-gray-5" aria-label="Đóng">
           <X size={28} />
         </button>
         <div className="flex-1">

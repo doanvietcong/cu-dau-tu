@@ -106,10 +106,15 @@ export interface UserProfile {
   // Settings
   soundEnabled: boolean;
   musicEnabled: boolean;
+  // Power-ups (purchased in shop)
+  streakFreezeCount: number;   // each protects 1 missed day
+  doubleOrNothingActive: boolean; // applies to the next completed lesson (2x XP or 0x XP)
   // Achievements
   achievementIds: string[];
   // Lesson progress
   completedLessonIds: string[];
+  // Lessons completed with zero mistakes (for "Hoàn hảo" achievement)
+  perfectLessonIds: string[];
   // Mistakes = lessons where we got questions wrong (for review)
   weakQuestionIds: string[];
 }

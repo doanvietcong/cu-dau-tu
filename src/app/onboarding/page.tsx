@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserStore } from "@/lib/store/userStore";
@@ -19,9 +19,26 @@ export default function OnboardingPage() {
   const [goal, setGoal] = useState<FinancialGoal | null>(user?.financialGoal ?? null);
   const [dailyXp, setDailyXp] = useState<number>(user?.dailyGoalXp ?? 20);
 
+  // Redirect to sign-up if no user after hydration completes.
+  // Called unconditionally on every render.
+  useEffect(() => {
+    if (!user) {
+      const t = setTimeout(() => {
+        if (!useUserStore.getState().user) router.replace("/auth/sign-up");
+      }, 150);
+      return () => clearTimeout(t);
+    }
+  }, [user, router]);
+
   if (!user) {
-    if (typeof window !== "undefined") router.replace("/auth/sign-up");
-    return null;
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-duolingo-snow">
+        <div className="text-center">
+          <div className="text-4xl">🦉</div>
+          <p className="mt-2 text-duolingo-gray-3">Đang tải...</p>
+        </div>
+      </main>
+    );
   }
 
   const goals: FinancialGoal[] = ["save-house", "pay-debt", "emergency-fund", "invest", "retire", "budget-control"];

@@ -207,6 +207,7 @@ export default function ReviewPage() {
             hearts={hearts}
             onAnswer={handleAnswer}
             onContinue={handleContinue}
+            onExit={() => router.push("/learn")}
           />
         </motion.div>
       </AnimatePresence>

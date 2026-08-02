@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useUserStore } from "@/lib/store/userStore";
 
 /**
@@ -19,7 +20,11 @@ class SoundFX {
     if (typeof window === "undefined") return null;
     if (!this.ctx) {
       try {
-        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const Ctor: typeof AudioContext | undefined =
+          window.AudioContext ||
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!Ctor) return null;
+        this.ctx = new Ctor();
       } catch {
         return null;
       }
@@ -81,10 +86,10 @@ function getSFX() {
 export function useSound() {
   const soundEnabled = useUserStore((s) => s.user?.soundEnabled ?? true);
 
-  // Sync enabled state
-  if (typeof window !== "undefined") {
+  // Sync enabled state via effect so we never mutate during render.
+  useEffect(() => {
     getSFX().setEnabled(soundEnabled);
-  }
+  }, [soundEnabled]);
 
   return {
     playClick: () => getSFX().click(),

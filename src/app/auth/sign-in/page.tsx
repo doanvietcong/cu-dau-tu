@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useUserStore } from "@/lib/store/userStore";
@@ -10,11 +10,18 @@ import { toast } from "sonner";
 
 export default function SignInPage() {
   const router = useRouter();
+  const existingUser = useUserStore((s) => s.user);
   const createUser = useUserStore((s) => s.createUser);
 
+  const [hydrated, setHydrated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Wait for Zustand persist middleware to rehydrate from localStorage before checking.
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   const handleSignIn = () => {
     if (!email || !email.includes("@")) {
@@ -26,14 +33,32 @@ export default function SignInPage() {
       return;
     }
     setLoading(true);
-    // For MVP: just create or restore user from email. In production, validate against backend.
+
     setTimeout(() => {
+      // If the same email is already saved locally → keep that user (restore progress).
+      // Otherwise create a fresh account using the email local-part as display name.
+      if (existingUser && existingUser.email === email) {
+        toast.success("Chào mừng quay lại! 🦉");
+        router.push(existingUser.hasOnboarded ? "/learn" : "/onboarding");
+        return;
+      }
+
       const name = email.split("@")[0] || "Nhà đầu tư";
-      createUser({ displayName: name.charAt(0).toUpperCase() + name.slice(1), email });
-      toast.success("Chào mừng quay lại! 🦉");
-      router.push("/learn");
+      createUser({
+        displayName: name.charAt(0).toUpperCase() + name.slice(1),
+        email,
+      });
+      toast.success("Tạo tài khoản mới — chào mừng! 🦉");
+      router.push("/onboarding");
     }, 500);
   };
+
+  // After hydration, prefill email with the saved one for convenience.
+  useEffect(() => {
+    if (hydrated && existingUser?.email && !email) {
+      setEmail(existingUser.email);
+    }
+  }, [hydrated, existingUser, email]);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-duolingo-green/10 to-duolingo-blue/10 px-4 py-8">

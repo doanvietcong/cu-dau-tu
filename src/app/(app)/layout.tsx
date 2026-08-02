@@ -11,6 +11,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = useUserStore((s) => s.user);
   const _tickDaily = useUserStore((s) => s._tickDaily);
 
+  // Auth gate — must be called unconditionally on every render.
   useEffect(() => {
     if (user === null) {
       // Wait for hydration to complete
@@ -25,6 +26,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [user, router, _tickDaily]);
 
+  // Onboarding gate — only schedule the redirect after the user is loaded.
+  useEffect(() => {
+    if (user && !user.hasOnboarded) {
+      router.replace("/onboarding");
+    }
+  }, [user, router]);
+
   if (!user) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -37,7 +45,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   if (!user.hasOnboarded) {
-    if (typeof window !== "undefined") router.replace("/onboarding");
     return null;
   }
 

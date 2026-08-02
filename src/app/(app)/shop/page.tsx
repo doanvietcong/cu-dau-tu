@@ -3,22 +3,14 @@
 import { useUserStore } from "@/lib/store/userStore";
 import { Button } from "@/components/ui/Button";
 import { toast } from "sonner";
-import { Heart, Snowflake, Sparkles, Zap, Crown, Watch } from "lucide-react";
-
-interface ShopItem {
-  id: string;
-  name: string;
-  description: string;
-  cost: number;
-  icon: React.ReactNode;
-  color: string;
-  action: () => void;
-}
+import { Heart, Snowflake, Zap } from "lucide-react";
 
 export default function ShopPage() {
   const user = useUserStore((s) => s.user);
   const spendCoins = useUserStore((s) => s.spendCoins);
   const refillHearts = useUserStore((s) => s.refillHearts);
+  const purchaseStreakFreeze = useUserStore((s) => s.purchaseStreakFreeze);
+  const purchaseDoubleOrNothing = useUserStore((s) => s.purchaseDoubleOrNothing);
 
   if (!user) return null;
 
@@ -41,29 +33,39 @@ export default function ShopPage() {
   };
 
   const buyStreakFreeze = () => {
-    if (spendCoins(200)) {
-      toast.success(`🧊 Streak Freeze đã được kích hoạt!`);
+    if (user.streakFreezeCount >= 3) {
+      toast.error("Đã có tối đa 3 Streak Freeze!");
+      return;
+    }
+    if (purchaseStreakFreeze()) {
+      toast.success(`🧊 +1 Streak Freeze (đang có ${user.streakFreezeCount + 1})`);
     } else {
       toast.error("Không đủ coins!");
     }
   };
 
   const buyDoubleOrNothing = () => {
-    if (spendCoins(100)) {
-      toast.success(`⚡ Đã mua Double or Nothing! Áp dụng cho bài tiếp theo.`);
+    if (user.doubleOrNothingActive) {
+      toast.error("Bạn đang có Double or Nothing chưa dùng!");
+      return;
+    }
+    if (purchaseDoubleOrNothing()) {
+      toast.success(`⚡ Double or Nothing đã được kích hoạt cho bài tiếp theo.`);
     } else {
       toast.error("Không đủ coins!");
     }
   };
 
-  const items: ShopItem[] = [
+  // Build items with hardcoded Tailwind classes so JIT can pick them up.
+  const items: { id: string; name: string; description: string; cost: number; icon: React.ReactNode; iconColor: string; borderColor: string; action: () => void }[] = [
     {
       id: "hearts-full",
       name: "Hồi đầy Hearts",
       description: `Refill ${user.maxHearts} tim ngay lập tức`,
       cost: 350,
       icon: <Heart size={28} fill="currentColor" />,
-      color: "duolingo-red",
+      iconColor: "text-duolingo-red",
+      borderColor: "border-duolingo-red-dark",
       action: buyHeartsFull,
     },
     {
@@ -72,25 +74,30 @@ export default function ShopPage() {
       description: "Thêm 1 tim ngay",
       cost: 80,
       icon: <Heart size={28} fill="currentColor" />,
-      color: "duolingo-red",
+      iconColor: "text-duolingo-red",
+      borderColor: "border-duolingo-red-dark",
       action: buyHeartOne,
     },
     {
       id: "streak-freeze",
       name: "Streak Freeze",
-      description: "Đóng băng streak 1 ngày nếu bạn quên học",
+      description: `Đóng băng streak 1 ngày nếu bạn quên học (đang có: ${user.streakFreezeCount})`,
       cost: 200,
       icon: <Snowflake size={28} />,
-      color: "duolingo-blue",
+      iconColor: "text-duolingo-blue",
+      borderColor: "border-duolingo-blue-dark",
       action: buyStreakFreeze,
     },
     {
       id: "double-or-nothing",
       name: "Double or Nothing",
-      description: "Nhân đôi XP bài học tiếp theo (hoặc mất hết)",
+      description: user.doubleOrNothingActive
+        ? "Đã kích hoạt — chờ bài tiếp theo"
+        : "Nhân đôi XP bài học tiếp theo",
       cost: 100,
       icon: <Zap size={28} fill="currentColor" />,
-      color: "duolingo-gold",
+      iconColor: "text-duolingo-gold",
+      borderColor: "border-duolingo-gold-dark",
       action: buyDoubleOrNothing,
     },
   ];
@@ -109,8 +116,8 @@ export default function ShopPage() {
       {/* Items grid */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {items.map((item) => (
-          <div key={item.id} className={`rounded-duo-lg border-2 border-${item.color}-dark bg-white p-4 shadow-duo-card`}>
-            <div className={`text-${item.color}`}>{item.icon}</div>
+          <div key={item.id} className={`rounded-duo-lg border-2 ${item.borderColor} bg-white p-4 shadow-duo-card`}>
+            <div className={item.iconColor}>{item.icon}</div>
             <h3 className="mt-2 font-display text-lg font-extrabold text-duolingo-gray-5">{item.name}</h3>
             <p className="mt-0.5 text-xs text-duolingo-gray-3">{item.description}</p>
             <Button onClick={item.action} size="md" fullWidth className="mt-3">

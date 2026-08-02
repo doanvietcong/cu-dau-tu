@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Sparkles, TrendingUp, Trophy, Flame, BookOpen, Heart, Brain } from "lucide-react";
 
 const features = [
-  { icon: BookOpen,  emoji: "📚", title: "32 bài học",         desc: "Từ tiền cơ bản đến FIRE" },
+  { icon: BookOpen,  emoji: "📚", title: "61 bài học",         desc: "Từ tiền cơ bản, BĐS, crypto đến tâm lý tài chính" },
   { icon: Brain,     emoji: "🧠", title: "Gamification",         desc: "Streak, XP, hearts giống Duolingo" },
   { icon: Trophy,    emoji: "🏆", title: "10 League xếp hạng",  desc: "Đồng → Kim cương, cạnh tranh tuần" },
   { icon: Flame,     emoji: "🔥", title: "Streak hàng ngày",     desc: "Duy trì thói quen học mỗi ngày" },
@@ -110,7 +110,7 @@ export default function LandingPage() {
           <h2 className="font-display text-3xl font-bold text-duolingo-gray-5 sm:text-4xl">
             Lộ trình <span className="text-duolingo-gold">A → Z</span>
           </h2>
-          <p className="mt-2 text-duolingo-gray-3">8 units · 32 bài học · từ cơ bản đến nâng cao</p>
+          <p className="mt-2 text-duolingo-gray-3">12 units · 61 bài học · từ cơ bản đến tâm lý tài chính</p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 text-left sm:grid-cols-4">
             {[
@@ -122,6 +122,10 @@ export default function LandingPage() {
               { e: "🏛️", t: "Đầu tư nâng cao" },
               { e: "📋", t: "Thuế & BH" },
               { e: "🌴", t: "FIRE" },
+              { e: "💰", t: "Tăng thu nhập" },
+              { e: "🏘️", t: "BĐS Việt Nam" },
+              { e: "₿",  t: "Crypto & Tài sản số" },
+              { e: "🧠", t: "Tâm lý tài chính" },
             ].map((u) => (
               <div key={u.t} className="duo-card text-center">
                 <div className="text-3xl">{u.e}</div>

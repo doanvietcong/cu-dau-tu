@@ -260,6 +260,7 @@ export default function LessonPlayer({ lessonId }: { lessonId: string }) {
             hearts={hearts}
             onAnswer={handleAnswer}
             onContinue={handleContinue}
+            onExit={() => setPhase("exit-confirm")}
           />
         </motion.div>
       </AnimatePresence>

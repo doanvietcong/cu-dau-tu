@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { UserProfile, FinancialGoal, LessonAttempt, Achievement } from "@/types";
 import { achievements, checkNewAchievements } from "@/data/achievements";
+import { UNITS } from "@/data/curriculum";
 import { getDateKey } from "@/lib/utils/cn";
 
 const DEFAULT_HEARTS = 5;
@@ -20,6 +21,9 @@ interface UserState {
   toggleMusic: () => void;
   setAvatar: (emoji: string) => void;
   setDisplayName: (name: string) => void;
+  purchaseStreakFreeze: () => boolean;
+  purchaseDoubleOrNothing: () => boolean;
+  consumeStreakFreeze: () => boolean;
   _setWeakQuestions?: (ids: string[]) => void;
   // Internal
   _tickDaily: () => void;
@@ -64,8 +68,11 @@ function newUser(input: { displayName: string; email: string; avatarEmoji?: stri
     financialGoal: input.financialGoal,
     soundEnabled: true,
     musicEnabled: false,
+    streakFreezeCount: 0,
+    doubleOrNothingActive: false,
     achievementIds: [],
     completedLessonIds: [],
+    perfectLessonIds: [],
     weakQuestionIds: [],
   };
 }
@@ -107,7 +114,16 @@ export const useUserStore = create<UserState>()(
         const yesterdayKey = getDateKey(yesterday);
         const isConsecutive = u.lastActiveDate === yesterdayKey;
 
-        const newStreak = isConsecutive ? u.streak + 1 : 1;
+        // If the user missed at least one full day (not yesterday) AND has a streak freeze
+        // available, auto-consume it to keep the streak alive.
+        let consumedFreeze = false;
+        let prevStreak = u.streak;
+        if (!isConsecutive && u.streakFreezeCount > 0 && u.streak > 0) {
+          consumedFreeze = true;
+          prevStreak = u.streak; // preserve streak
+        }
+
+        const newStreak = consumedFreeze ? prevStreak : isConsecutive ? prevStreak + 1 : 1;
         set({
           user: {
             ...u,
@@ -119,6 +135,7 @@ export const useUserStore = create<UserState>()(
             weeklyXp: 0, // reset weekly on new day — in real app, reset on Monday
             // Refill hearts at start of new day (capped at max)
             hearts: Math.min(u.maxHearts, u.hearts + 1),
+            streakFreezeCount: consumedFreeze ? u.streakFreezeCount - 1 : u.streakFreezeCount,
           },
         });
       },
@@ -131,17 +148,27 @@ export const useUserStore = create<UserState>()(
 
         const cur = get().user!;
         const today = getDateKey();
-        const isFirstAttemptToday = cur.todayDate !== today ? false : true;
-        // (already ticked, todayXp will be 0 if first time today)
 
         // XP = base * 1.0 + 0.5 bonus for perfect lesson
         const perfect = attempt.mistakes.length === 0;
-        const xpEarned = perfect ? Math.ceil(attempt.xpEarned * 1.5) : attempt.xpEarned;
+        let xpEarned = perfect ? Math.ceil(attempt.xpEarned * 1.5) : attempt.xpEarned;
         const coinsEarned = attempt.coinsEarned;
+
+        // Double or Nothing power-up: 50% chance XP becomes 0, 50% chance XP becomes 2x.
+        // Failures are deterministic enough for the lesson to still feel earned (≥80% pass
+        // guarantees a positive outcome), so we use a simple 2x on the next lesson.
+        const donActive = cur.doubleOrNothingActive;
+        if (donActive) {
+          xpEarned = xpEarned * 2;
+        }
 
         const newCompleted = cur.completedLessonIds.includes(attempt.lessonId)
           ? cur.completedLessonIds
           : [...cur.completedLessonIds, attempt.lessonId];
+
+        const newPerfect = perfect && !cur.perfectLessonIds.includes(attempt.lessonId)
+          ? [...cur.perfectLessonIds, attempt.lessonId]
+          : cur.perfectLessonIds;
 
         const newWeakIds = Array.from(
           new Set([...cur.weakQuestionIds, ...attempt.mistakes.map((m) => m.questionId)])
@@ -160,11 +187,20 @@ export const useUserStore = create<UserState>()(
           todayXp: newTodayXp,
           todayDate: today,
           completedLessonIds: newCompleted,
+          perfectLessonIds: newPerfect,
           weakQuestionIds: newWeakIds,
+          // Consume the Double-or-Nothing power-up after the next completed lesson.
+          doubleOrNothingActive: donActive ? false : cur.doubleOrNothingActive,
         };
 
-        // Check new achievements
-        const newAch = checkNewAchievements(updated);
+        // Determine which units are now fully complete
+        // (computed after the updated completedLessonIds)
+        const completedUnitIds = UNITS
+          .filter((unit) => unit.lessonIds.every((id) => updated.completedLessonIds.includes(id)))
+          .map((unit) => unit.id);
+
+        // Check new achievements (passes completed unit ids for unit-X achievements)
+        const newAch = checkNewAchievements(updated, completedUnitIds);
         if (newAch.length > 0) {
           updated.achievementIds = [...updated.achievementIds, ...newAch];
         }
@@ -221,10 +257,42 @@ export const useUserStore = create<UserState>()(
         if (!u) return;
         set({ user: { ...u, weakQuestionIds: ids } });
       },
+
+      consumeStreakFreeze: () => {
+        const u = get().user;
+        if (!u || u.streakFreezeCount <= 0) return false;
+        set({ user: { ...u, streakFreezeCount: u.streakFreezeCount - 1 } });
+        return true;
+      },
+
+      purchaseStreakFreeze: () => {
+        const u = get().user;
+        if (!u) return false;
+        if (u.streakFreezeCount >= 3) return false;
+        if (u.coins < 200) return false;
+        set({ user: { ...u, coins: u.coins - 200, streakFreezeCount: u.streakFreezeCount + 1 } });
+        return true;
+      },
+
+      purchaseDoubleOrNothing: () => {
+        const u = get().user;
+        if (!u) return false;
+        if (u.doubleOrNothingActive) return false;
+        if (u.coins < 100) return false;
+        set({ user: { ...u, coins: u.coins - 100, doubleOrNothingActive: true } });
+        return true;
+      },
     }),
     {
       name: "fd-user",
       storage: createJSONStorage(() => localStorage),
+      // Backfill any new fields (e.g. streakFreezeCount, doubleOrNothingActive) for users
+      // who created their account before those fields were introduced.
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<UserProfile>;
+        return { ...current, ...p } as UserState;
+      },
+      version: 1,
     }
   )
 );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useUserStore } from "@/lib/store/userStore";
 import { achievements } from "@/data/achievements";
@@ -9,7 +10,7 @@ import { ProgressBar, RingProgress } from "@/components/ui/Progress";
 import { StreakCounter, HeartCounter } from "@/components/ui/StatBadge";
 import { Button } from "@/components/ui/Button";
 import { CuDauTu } from "@/components/mascot/CuDauTu";
-import { Settings, Share2, LogOut, Award, Lock, Target, Flame, Zap, Heart } from "lucide-react";
+import { Settings, LogOut, Award, Lock, Target, Flame, Zap, Heart, Volume2, VolumeX, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -17,6 +18,10 @@ export default function ProfilePage() {
   const router = useRouter();
   const user = useUserStore((s) => s.user);
   const signOut = useUserStore((s) => s.signOut);
+  const toggleSound = useUserStore((s) => s.toggleSound);
+  const toggleMusic = useUserStore((s) => s.toggleMusic);
+  const setAvatar = useUserStore((s) => s.setAvatar);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   if (!user) return null;
 
@@ -52,9 +57,14 @@ export default function ProfilePage() {
               </div>
             )}
           </div>
-          <Link href="/profile/settings" className="text-duolingo-gray-3 hover:text-duolingo-gray-5">
+          <button
+            type="button"
+            onClick={() => setSettingsOpen(true)}
+            className="text-duolingo-gray-3 hover:text-duolingo-gray-5"
+            aria-label="Mở cài đặt"
+          >
             <Settings size={22} />
-          </Link>
+          </button>
         </div>
 
         {/* Quick stats */}
@@ -195,6 +205,92 @@ export default function ProfilePage() {
       >
         <LogOut size={16} /> Đăng xuất
       </Button>
+
+      {/* Settings modal */}
+      {settingsOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-40 flex items-end justify-center bg-black/40 sm:items-center"
+          onClick={() => setSettingsOpen(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-t-duo-lg bg-white p-5 shadow-duo-card sm:rounded-duo-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-xl font-extrabold text-duolingo-gray-5">Cài đặt</h2>
+              <button
+                type="button"
+                onClick={() => setSettingsOpen(false)}
+                className="text-duolingo-gray-3 hover:text-duolingo-gray-5"
+                aria-label="Đóng"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {/* Avatar picker */}
+              <div>
+                <div className="mb-1 text-xs font-bold uppercase text-duolingo-gray-3">Avatar</div>
+                <div className="flex flex-wrap gap-2">
+                  {["🦉", "🦊", "🐯", "🐼", "🦁", "🐰", "🐢", "🦄", "🐳", "🦅"].map((e) => (
+                    <button
+                      key={e}
+                      type="button"
+                      onClick={() => setAvatar(e)}
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 text-2xl transition-all ${
+                        user.avatarEmoji === e
+                          ? "border-duolingo-green bg-duolingo-green/10"
+                          : "border-duolingo-gray-1 bg-white hover:border-duolingo-green/50"
+                      }`}
+                    >
+                      {e}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sound */}
+              <button
+                type="button"
+                onClick={() => {
+                  toggleSound();
+                  toast.success(user.soundEnabled ? "Đã tắt âm thanh" : "Đã bật âm thanh");
+                }}
+                className="flex w-full items-center justify-between rounded-xl border-2 border-duolingo-gray-1 bg-white p-3 hover:border-duolingo-green/50"
+              >
+                <div className="flex items-center gap-2">
+                  {user.soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                  <span className="font-bold text-duolingo-gray-5">Âm thanh</span>
+                </div>
+                <span className="text-xs font-bold text-duolingo-gray-3">
+                  {user.soundEnabled ? "BẬT" : "TẮT"}
+                </span>
+              </button>
+
+              {/* Music */}
+              <button
+                type="button"
+                onClick={() => {
+                  toggleMusic();
+                  toast.success(user.musicEnabled ? "Đã tắt nhạc nền" : "Đã bật nhạc nền");
+                }}
+                className="flex w-full items-center justify-between rounded-xl border-2 border-duolingo-gray-1 bg-white p-3 hover:border-duolingo-green/50"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">🎵</span>
+                  <span className="font-bold text-duolingo-gray-5">Nhạc nền</span>
+                </div>
+                <span className="text-xs font-bold text-duolingo-gray-3">
+                  {user.musicEnabled ? "BẬT" : "TẮT"}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

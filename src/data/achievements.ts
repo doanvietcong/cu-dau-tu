@@ -60,10 +60,10 @@ export const achievements: Achievement[] = [
   {
     id: "perfect-lesson",
     title: "Hoàn hảo",
-    description: "Hoàn thành bài học không sai câu nào",
+    description: "Hoàn thành 1 bài học không sai câu nào",
     iconEmoji: "💎",
     xpReward: 15,
-    condition: (u) => u.completedLessonIds.length >= 1, // checked per-lesson
+    condition: (u) => u.perfectLessonIds.length >= 1,
   },
   {
     id: "unit-1",
@@ -71,6 +71,30 @@ export const achievements: Achievement[] = [
     description: "Hoàn thành Unit 1: Tiền cơ bản",
     iconEmoji: "🏛️",
     xpReward: 30,
+    condition: () => false, // checked at runtime against completedLessonIds
+  },
+  {
+    id: "unit-3",
+    title: "Heo đất chăm chỉ",
+    description: "Hoàn thành Unit 3: Tiết kiệm",
+    iconEmoji: "🐷",
+    xpReward: 30,
+    condition: () => false, // checked at runtime against completedLessonIds
+  },
+  {
+    id: "unit-5",
+    title: "Nhà đầu tư mới",
+    description: "Hoàn thành Unit 5: Đầu tư cơ bản",
+    iconEmoji: "📈",
+    xpReward: 50,
+    condition: () => false, // checked at runtime against completedLessonIds
+  },
+  {
+    id: "unit-9",
+    title: "Siêu kiếm tiền",
+    description: "Hoàn thành Unit 9: Tăng thu nhập",
+    iconEmoji: "💰",
+    xpReward: 80,
     condition: () => false, // checked at runtime against completedLessonIds
   },
   {
@@ -87,8 +111,10 @@ export function checkNewAchievements(user: import("@/types").UserProfile, unitCo
   const newly: string[] = [];
   for (const a of achievements) {
     if (user.achievementIds.includes(a.id)) continue;
-    if (a.id === "unit-1") {
-      if (unitCompleteIds.includes("unit-1")) newly.push(a.id);
+    // Unit achievements (unit-1, unit-3, unit-5, unit-9, ...) are checked against the
+    // `unitCompleteIds` array that the caller (applyLessonAttempt) computes from curriculum.
+    if (a.id.startsWith("unit-")) {
+      if (unitCompleteIds.includes(a.id)) newly.push(a.id);
       continue;
     }
     if (a.condition(user)) newly.push(a.id);
