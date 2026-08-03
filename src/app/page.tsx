@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Sparkles, TrendingUp, Trophy, Flame, BookOpen, Heart, Brain } from "lucide-react";
 
 const features = [
-  { icon: BookOpen,  emoji: "📚", title: "83 bài học",         desc: "Từ tiền cơ bản, BĐS, crypto đến tâm lý tài chính" },
+  { icon: BookOpen,  emoji: "📚", title: "107 bài học",         desc: "Từ tiền cơ bản, gia đình, freelancer đến tâm lý tài chính" },
   { icon: Brain,     emoji: "🧠", title: "Gamification",         desc: "Streak, XP, hearts giống Duolingo" },
   { icon: Trophy,    emoji: "🏆", title: "10 League xếp hạng",  desc: "Đồng → Kim cương, cạnh tranh tuần" },
   { icon: Flame,     emoji: "🔥", title: "Streak hàng ngày",     desc: "Duy trì thói quen học mỗi ngày" },
@@ -110,9 +110,9 @@ export default function LandingPage() {
           <h2 className="font-display text-3xl font-bold text-duolingo-gray-5 sm:text-4xl">
             Lộ trình <span className="text-duolingo-gold">A → Z</span>
           </h2>
-          <p className="mt-2 text-duolingo-gray-3">15 units · 83 bài học · từ cơ bản đến tâm lý tài chính + bẫy tài chính VN</p>
+          <p className="mt-2 text-duolingo-gray-3">18 units · 107 bài học · từ cơ bản đến tâm lý tài chính + bẫy tài chính VN + gia đình & freelancer</p>
 
-          <div className="mt-10 grid grid-cols-2 gap-3 text-left sm:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-3 text-left sm:grid-cols-3 lg:grid-cols-6">
             {[
               { e: "💵", t: "Tiền cơ bản" },
               { e: "📊", t: "Ngân sách" },
@@ -129,6 +129,9 @@ export default function LandingPage() {
               { e: "🛡️", t: "Bảo hiểm toàn diện" },
               { e: "🚨", t: "Bẫy tài chính VN" },
               { e: "🇻🇳", t: "Đầu tư thực chiến VN" },
+              { e: "👨‍👩‍👧‍👦", t: "Tài chính gia đình" },
+              { e: "🛒", t: "Chi tiêu thực chiến" },
+              { e: "💼", t: "Freelancer & HKD" },
             ].map((u) => (
               <div key={u.t} className="duo-card text-center">
                 <div className="text-3xl">{u.e}</div>
