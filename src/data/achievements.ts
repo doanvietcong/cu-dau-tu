@@ -76,7 +76,7 @@ export const achievements: Achievement[] = [
   {
     id: "unit-3",
     title: "Heo đất chăm chỉ",
-    description: "Hoàn thành Unit 3: Tiết kiệm",
+    description: "Hoàn thành Unit 3: Tiết kiệm & Quỹ khẩn cấp",
     iconEmoji: "🐷",
     xpReward: 30,
     condition: () => false, // checked at runtime against completedLessonIds
@@ -84,14 +84,14 @@ export const achievements: Achievement[] = [
   {
     id: "unit-5",
     title: "Nhà đầu tư mới",
-    description: "Hoàn thành Unit 5: Đầu tư cơ bản",
+    description: "Hoàn thành Unit 5: Đầu tư cho người mới",
     iconEmoji: "📈",
     xpReward: 50,
     condition: () => false, // checked at runtime against completedLessonIds
   },
   {
     id: "unit-9",
-    title: "Siêu kiếm tiền",
+    title: "Đòn bẩy thu nhập",
     description: "Hoàn thành Unit 9: Tăng thu nhập",
     iconEmoji: "💰",
     xpReward: 80,

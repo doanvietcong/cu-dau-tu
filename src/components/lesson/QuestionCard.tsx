@@ -56,13 +56,20 @@ export function QuestionCard({ question, questionNumber, totalQuestions, hearts,
       case "fill-blank": {
         // Compare normalized: lowercase + remove all whitespace + remove diacritics.
         // This way "lam phat" / "lamphat" / "lạm phát" all match "lạm phát".
-        const normalize = (s: string) =>
-          s
+        // Numbers: also normalize the decimal separator so that a Vietnamese user
+        // typing "0,5" matches the canonical "0.5", and "1.000.000" matches "1000000".
+        const normalize = (s: string) => {
+          const base = s
             .trim()
             .toLowerCase()
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/\s+/g, "");
+          // Vietnamese decimal comma → dot: "0,5" -> "0.5"
+          const commaFixed = base.replace(/,/g, ".");
+          // Vietnamese thousands separator: "1.000.000" -> "1000000"
+          return commaFixed.replace(/^(\d{1,3}(?:\.\d{3})+)$/, (m) => m.replace(/\./g, ""));
+        };
         const ans = normalize(textAnswer);
         const correct = normalize(question.blankAnswer || "");
         return ans === correct;

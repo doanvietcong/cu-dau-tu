@@ -30,15 +30,36 @@ const tests = [
   // User gõ sai chính tả -> reject
   ["lam phatx", false, "lạm phát"],
   ["payyourselfist", false, "pay yourself first"],
+  // Số thập phân: người Việt gõ dấu phẩy, app lưu dấu chấm (hoặc ngược lại)
+  ["0,5", true, "0,5"],
+  ["0.5", true, "0,5"],
+  ["0,5", true, "0.5"],
+  ["0.5", true, "0.5"],
+  ["2,7", true, "2,7"],
+  ["2.7", true, "2,7"],
+  ["1,5", true, "1,5"],
+  ["3,15", true, "3,15"],
+  ["0,03", true, "0,03"],
+  ["0,25", true, "0,25"],
+  // Số phân tách nghìn kiểu VN: 1.000.000 = 1000000
+  ["1.000.000", true, "1000000"],
+  ["1000000", true, "1000000"],
+  ["1,000,000", true, "1000000"],
+  // Sai số -> reject
+  ["0,6", false, "0,5"],
+  ["1,2", false, "2,7"],
 ];
 
+// Hàm normalize — phải khớp CHÍNH XÁC với QuestionCard.tsx
 function normalize(s) {
-  return s
+  const base = s
     .trim()
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, "");
+  const commaFixed = base.replace(/,/g, ".");
+  return commaFixed.replace(/^(\d{1,3}(?:\.\d{3})+)$/, (m) => m.replace(/\./g, ""));
 }
 
 let pass = 0, fail = 0;

@@ -1,7 +1,7 @@
 // Cú Đầu Tư — Service Worker
 // Cache-first strategy for static assets, network-first for HTML
 
-const CACHE_NAME = "cu-dau-tu-v2";
+const CACHE_NAME = "cu-dau-tu-v3";
 // NOTE: Next.js `trailingSlash: true` means actual URLs end with "/".
 // Cache both forms so offline works regardless of how user typed the URL.
 const STATIC_CACHE = [

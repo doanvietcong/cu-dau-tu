@@ -23,10 +23,10 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 const MOCK_RESPONSES: Record<string, string> = {
-  "lai kep": "Lãi kép là lãi mẹ đẻ lãi con — bạn nhận lãi trên cả gốc VÀ lãi đã sinh ra. Thời gian là yếu tố quan trọng nhất. Ví dụ 10 triệu với lãi 10%/năm, sau 10 năm = 25.9 triệu, sau 20 năm = 67.3 triệu, sau 30 năm = 174.5 triệu!",
-  "dau tu": "Với 100 triệu và là người mới, em khuyên:\n\n1. **30-50%** tiết kiệm có kỳ hạn (an toàn)\n2. **20-30%** quỹ mở cổ phiếu (VCBF, VinaCapital) — DCA mỗi tháng\n3. **10-20%** cổ phiếu blue-chip VN (VCB, FPT, MWG) nếu hiểu biết\n4. **Giữ 5-10%** tiền mặt cho cơ hội\n\nQuan trọng: đừng all-in 1 chỗ, đừng dùng margin/đòn bẩy khi mới bắt đầu.",
+  "lai kep": "Lãi kép là lãi mẹ đẻ lãi con — bạn nhận lãi trên cả gốc VÀ lãi đã sinh ra. Thời gian là yếu tố quan trọng nhất. Ví dụ 10 triệu với lãi 10%/năm, sau 10 năm = 25,9 triệu, sau 20 năm = 67,3 triệu, sau 30 năm = 174,5 triệu!",
+  "dau tu": "Với 100 triệu và là người mới, mình khuyên:\n\n1. **30-50%** tiết kiệm có kỳ hạn (an toàn)\n2. **20-30%** quỹ mở cổ phiếu (VCBF, VinaCapital) — DCA mỗi tháng\n3. **10-20%** cổ phiếu blue-chip VN (VCB, FPT, MWG) nếu hiểu biết\n4. **Giữ 5-10%** tiền mặt cho cơ hội\n\nQuan trọng: đừng all-in một chỗ, đừng dùng margin (vay ký quỹ) khi mới bắt đầu.",
   "the tin dung": "Để thoát nợ thẻ tín dụng:\n\n1. **Dừng dùng thẻ** ngay (cất đi)\n2. **Gọi ngân hàng** xin giảm lãi hoặc chuyển đổi sang trả góp 0%\n3. **Liệt kê tất cả nợ**: gốc + lãi + phí phạt\n4. **Áp dụng snowball**: trả khoản nhỏ nhất trước để có động lực\n5. **Cắt subscription, ăn uống ngoài** — chuyển tiền đó trả nợ\n6. **Tăng thu nhập**: OT, freelance, bán đồ không dùng\n\nLãi thẻ tín dụng 25-35%/năm — trả càng sớm càng đỡ đau.",
-  "khan cap": "Quỹ khẩn cấp lý tưởng = 3-6 tháng chi phí sinh hoạt. Nếu freelance hoặc thu nhập không ổn định → 6-9 tháng.\n\n**Gửi ở đâu**: tiết kiệm KHÔNG kỳ hạn (rút ngay, lãi thấp nhưng an toàn tuyệt đối). KHÔNG đầu tư cổ phiếu/crypto với tiền quỹ khẩn cấp.\n\n**Bắt đầu thế nào**: đặt mục tiêu nhỏ trước — 1 tháng chi phí trong 3-6 tháng, rồi tăng dần.",
+  "khan cap": "Quỹ khẩn cấp nên bằng 3-6 tháng chi phí sinh hoạt nếu thu nhập ổn định. Gia đình có con nhỏ, thu nhập không ổn định hoặc làm freelance → nên có 6-12 tháng.\n\n**Gửi ở đâu**: tiết kiệm không kỳ hạn hoặc kỳ hạn ngắn (rút được ngay, lãi thấp hơn nhưng đúng mục đích). KHÔNG đầu tư cổ phiếu hay crypto với tiền quỹ khẩn cấp.\n\n**Bắt đầu thế nào**: đặt mục tiêu nhỏ trước — tích lũy bằng 1 tháng chi phí trong 3-6 tháng, rồi tăng dần.",
   "vn-index": "VN-Index là chỉ số đo sức khỏe toàn thị trường HOSE (Sàn Tp.HCM). Mua cổ phiếu phụ thuộc vào:\n\n1. **Mục tiêu tài chính** của bạn (ngắn hạn vs dài hạn)\n2. **Khẩu vị rủi ro** (chịu được mất 30-50%?)\n3. **Kiến thức** (đã hiểu P/E, ROE, phân tích cơ bản?)\n\n**Nếu mới bắt đầu**: nên DCA (mua đều đặn hàng tháng) quỹ mở index VN30 trước (FUEVFVN), sau khi hiểu rồi hãy chọn cổ phiếu riêng lẻ. Đừng all-in một lúc, đừng dùng margin.",
   "mua nha": "Mua hay thuê phụ thuộc:\n\n**Mua nhà** hợp lý khi:\n- Bạn ổn định ở 1 nơi >5 năm\n- Trả trước ≥30%, vay ≤7 lần thu nhập năm\n- Trả góp ≤30% thu nhập ròng\n- Không có kế hoạch lớn (du học, kinh doanh)\n\n**Thuê nhà** hợp lý khi:\n- Còn trẻ (<30), chưa ổn định\n- Thu nhập chưa cao, tiền đi đầu tư lợi nhuận > lãi vay\n- Cần linh hoạt di chuyển\n\n**Mẹo**: dùng máy tính 'Vay mua nhà' ở trang Công cụ của Cú để tính trước khi quyết.",
 };
@@ -37,7 +37,7 @@ function findMockResponse(question: string): string {
     const k = key.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     if (q.includes(k)) return val;
   }
-  return "Câu hỏi hay! Hiện tại em đang trong chế độ DEMO với các câu trả lời mẫu có sẵn. Để kích hoạt AI thật, anh cần:\n\n1. Tạo Cloudflare Worker làm proxy (xem file `workers/ai-tutor.ts`)\n2. Cấu hình API key (OpenAI hoặc Anthropic) trong Worker secrets\n3. Deploy worker và update endpoint trong code\n\nEm sẽ gửi hướng dẫn chi tiết khi anh sẵn sàng. Trong lúc chờ, anh có thể thử hỏi: '" + SUGGESTED_QUESTIONS[0] + "', '" + SUGGESTED_QUESTIONS[1] + "', v.v.";
+  return "Câu hỏi hay! Hiện tại Cú Đầu Tư đang chạy ở chế độ DEMO với câu trả lời mẫu có sẵn, chưa kết nối AI thật. Để kích hoạt AI thật, bạn cần:\n\n1. Tạo Cloudflare Worker làm proxy (xem file `workers/ai-tutor.ts`)\n2. Cấu hình API key (OpenAI hoặc Anthropic) trong Worker secrets\n3. Deploy worker và cập nhật endpoint trong code\n\nTrong lúc chờ, bạn có thể thử hỏi: '" + SUGGESTED_QUESTIONS[0] + "', '" + SUGGESTED_QUESTIONS[1] + "' hoặc các câu gợi ý bên dưới.";
 }
 
 export default function TutorPage() {
@@ -45,7 +45,7 @@ export default function TutorPage() {
     {
       id: "welcome",
       role: "assistant",
-      content: "Chào anh! 👋 Em là Cú Đầu Tư — trợ lý tài chính cá nhân. Hỏi em bất cứ điều gì về tiền bạc, đầu tư, tiết kiệm nhé!",
+      content: "Chào bạn! 👋 Mình là Cú Đầu Tư — trợ lý tài chính cá nhân. Hỏi mình bất cứ điều gì về tiền bạc, đầu tư, tiết kiệm nhé!",
       ts: Date.now(),
     },
   ]);

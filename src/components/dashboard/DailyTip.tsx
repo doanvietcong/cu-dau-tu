@@ -13,10 +13,10 @@ const TIPS = [
   "💡 DCA (mua đều đặn mỗi tháng) giúp trung bình giá, giảm rủi ro mua đỉnh. Phù hợp người mới.",
   "💡 Trước khi đầu tư, hỏi: 'Nếu mất 50%, mình có hoảng không?'. Nếu có → chưa sẵn sàng.",
   "💡 Quy tắc 72: lãi 8%/năm → tiền gấp đôi sau 9 năm. Lãi 12%/năm → 6 năm. Compound cực mạnh.",
-  "💡 Mua cà phê 30k/ngày × 30 = 900k/tháng. 10 năm với lãi 10% = ~180 triệu. Latte factor có thật.",
+  "💡 'Latte factor' — cà phê 30k/ngày × 10 năm, có lãi kép 10%/năm, cũng lên khoảng 180 triệu. Thói quen nhỏ, hệ quả lớn.",
   "💡 Đừng bỏ hết trứng vào 1 giỏ. Đa dạng hóa 5-10 cổ phiếu ở 3-5 ngành khác nhau.",
   "💡 BHNT mua vì BẢO VỆ gia đình, không phải vì lãi suất. Lãi BHNT thường thấp hơn đầu tư.",
-  "💡 Thuế TNCN 7 bậc lũy tiến: 5% → 10% → 15% → 20% → 25% → 30% → 35%. Thu nhập càng cao, thuế suất phần vượt càng cao.",
+  "💡 Thuế TNCN 2026 còn 5 bậc: 5% → 10% → 20% → 30% → 35%. Giảm trừ 15,5 triệu/tháng bản thân, 6,2 triệu mỗi người phụ thuộc.",
   "💡 BĐS = đòn bẩy tài chính. Vay 70% mua nhà 3 tỷ → lãi 10% nhà = lãi 33% vốn tự có. Ngược lại cũng đúng.",
   "💡 Trước 30 tuổi, tập trung vào TĂNG THU NHẬP (học, kỹ năng, side hustle) hơn là tiết kiệm từng đồng.",
   "💡 Mục tiêu SMART: Specific (cụ thể), Measurable (đo được), Achievable (khả thi), Relevant (liên quan), Time-bound (có hạn).",
@@ -38,7 +38,7 @@ const TIPS = [
 
   // === MỚI: ĐẦU TƯ THỰC CHIẾN (Unit 15) ===
   "💡 Khi 5/5 CTCK cùng 'Mua' 1 cổ phiếu = consensus = KHÔNG có edge. Tìm mã bị đánh giá thấp mới có cơ hội.",
-  "💡 P/E = 32x (MWG 2024) gấp 2-2.5x ngành = đắt. Trả 32 năm lợi nhuận để sở hữu - chỉ hợp lý khi tăng trưởng EPS > 30%.",
+  "💡 P/E = 32x (MWG 2024) gấp 2-2,5x ngành = đắt. Trả 32 năm lợi nhuận để sở hữu - chỉ hợp lý khi tăng trưởng EPS > 30%.",
   "💡 Cổ đông lớn bán liên tục = cảnh báo mạnh. Người trong cuộc biết công ty rõ hơn analyst.",
   "💡 HPG (Hòa Phát) là cổ phiếu chu kỳ thép. P/E 8-10x, phụ thuộc giá HRC TQ. Cần theo dõi giá thép.",
   "💡 VinFast lỗ lũy kế 8-10 tỷ USD. VIC đang bơm vốn liên tục. Coi chừng pha loãng cổ đông hiện hữu.",
@@ -50,27 +50,32 @@ const TIPS = [
   "💡 Cấp dưỡng nuôi con: 15-30% thu nhập bên không trực tiếp nuôi. 2 con: 20-35%. 3 con trở lên: 25-40%.",
   "💡 Di chúc viết tay cần: viết tay toàn bộ + ký tên + ghi ngày tháng. Thiếu 1 trong 3 = vô hiệu.",
   "💡 Phần thừa kế bắt buộc = 2/3 tài sản cho con dưới 18, cha mẹ, vợ/chồng. Bạn không thể cho đi hết.",
-  "💡 Bố mẹ > 60 tuổi không thu nhập = người phụ thuộc → giảm trừ 4.4 triệu/tháng/người khỏi thuế TNCN.",
+  "💡 Bố mẹ từ 60 tuổi, thu nhập dưới 3 triệu/tháng = người phụ thuộc → giảm trừ 6,2 triệu/tháng khỏi thuế TNCN của con.",
   "💡 Quỹ khẩn cấp gia đình 6-12 tháng chi phí. 2 thu nhập: 6 tháng. 1 thu nhập: 9-12 tháng.",
-  "💡 Nuôi con 0-18 tuổi tại VN: 800 triệu - 1.5 tỷ. Trường quốc tế/du học: 3-5 tỷ. Lập quỹ giáo dục sớm.",
+  "💡 Nuôi con 0-18 tuổi tại VN: 800 triệu - 1,5 tỷ. Trường quốc tế/du học: 3-5 tỷ. Lập quỹ giáo dục sớm.",
+
+  // === MỚI: THỊ TRƯỜNG 2026 ===
+  "💡 Lãi suất tiết kiệm 12 tháng năm 2026 bình quân 8,4%/năm (tăng 2,6 điểm so với đầu năm). Gửi kỳ hạn dài lại hấp dẫn.",
+  "💡 Vay mua nhà năm 2026 khoảng 11-13%/năm, đắt hơn 2024 nhiều. Tính kỹ khả năng trả trước khi ký hợp đồng.",
+  "💡 VN-Index đi từ 1.170 điểm (cuối 2023) → 1.385 (cuối 2024) → 1.557 (7/2025) → ~1.825 (9/2026). Số liệu thị trường cần mốc thời gian đi kèm.",
 
   // === MỚI: CHI TIÊU THỰC CHIẾN (Unit 17) ===
-  "💡 Trà sữa 50k/ngày × 30 năm × lãi 7% = hơn 2 tỷ. Cắt 1 ly/ngày = mua được căn hộ nhỏ.",
-  "💡 Grab 2.5tr/tháng × 30 năm × lãi 7% = hơn 2.5 tỷ. Metro + xe máy tiết kiệm hơn nhiều.",
+  "💡 Trà sữa 50k/ngày × 30 năm × lãi 7% ≈ 1,7 tỷ. Không cần bỏ hẳn — chỉ cần giảm xuống 30k là tiết kiệm được một phần ba.",
+  "💡 Grab 2,5tr/tháng × 30 năm × lãi 7% = hơn 2,5 tỷ. Metro + xe máy tiết kiệm hơn nhiều.",
   "💡 Quy tắc 24-72h cooling-off: mua đồ > 500k, chờ 1-3 ngày. Nếu quên = tiết kiệm. Áp dụng cho cả flash sale.",
-  "💡 Tiền thuê nhà không quá 30% thu nhập. Lương 15tr → thuê tối đa 4.5tr. Quá 50% = khủng hoảng khi mất việc.",
+  "💡 Tiền thuê nhà không quá 30% thu nhập. Lương 15tr → thuê tối đa 4,5tr. Quá 50% = khủng hoảng khi mất việc.",
   "💡 GrabFood gấp 2-3x nấu ở nhà. Cơm nấu nhà 25-35k vs GrabFood 60-100k/bữa. 1 tháng tiết kiệm 3-5 triệu.",
-  "💡 Chi phí đi lại không quá 15% thu nhập. Lương 15tr → tối đa 2.25tr. Grab 3-4tr = đang vượt ngân sách.",
+  "💡 Chi phí đi lại không quá 15% thu nhập. Lương 15tr → tối đa 2,25tr. Grab 3-4tr = đang vượt ngân sách.",
   "💡 'Decoy pricing': shop treo 1 sản phẩm giá cao để sản phẩm giữa trông 'hời'. Đừng mua vì sale 50% nếu không cần.",
 
   // === MỚI: FREELANCER/HKD (Unit 18) ===
   "💡 Freelancer < 100 triệu/năm: thuế khoán 1-2% trên doanh thu. Không cần đăng ký HKD nhưng VẪN phải nộp thuế.",
-  "💡 Thuế TNCN freelancer (HKD): 10% trên doanh thu. Hạn quyết toán 30/4 năm sau. Trễ = phạt + lãi 0.03%/ngày.",
-  "💡 BHXH tự nguyện 22% (Luật 41/2024 từ 1/7/2025). Mức 5tr/tháng → đóng 1.1tr. 35 năm = 75% lương hưu.",
+  "💡 Thuế TNCN freelancer (HKD): 10% trên thu nhập tính thuế. Quyết toán hạn 30/4 năm sau. Trễ hạn: phạt + lãi 0,03%/ngày.",
+  "💡 BHXH tự nguyện 22% (Luật 41/2024). Đủ 15 năm là được hưởng lương hưu — không phải 20 năm như nhiều người nghĩ.",
   "💡 Quỹ khẩn cấp freelancer 9-12 tháng. Thu nhập dao động → cần lớn hơn nhân viên chính thức.",
   "💡 Hợp đồng freelance PHẢI có: scope, deadline, milestone, deposit (20-50%), IP rights, phạt trễ thanh toán.",
   "💡 Scope creep (KH yêu cầu thêm ngoài hợp đồng) = thông báo KH hoặc tính thêm phí. KHÔNG làm miễn phí.",
-  "💡 Nghỉ việc an toàn: cần quỹ 6-12 tháng + kế hoạch rõ ràng. Đừng nghỉ khi quỹ chưa đủ, kẻo phải nhận việc tệ.",
+  "💡 Nghỉ việc cần quỹ 6-12 tháng chi phí. Nhưng còn 1 việc nên làm ngay: kiểm tra bảo hiểm xã hội và bảo hiểm y tế còn hiệu lực sau khi nghịp việc để không bị hụt quyền lợi.",
   "💡 'Pay yourself first' cho freelancer: khi có thu nhập lớn, chuyển ngay 20% vào tài khoản 'lương' cố định.",
 ];
 

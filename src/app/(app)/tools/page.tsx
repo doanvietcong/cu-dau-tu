@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn, formatNumber } from "@/lib/utils/cn";
+import { cn, formatNumber, formatVNDShort } from "@/lib/utils/cn";
 import { Calculator, TrendingUp, Home, Flame, FileText, ChevronLeft, Info } from "lucide-react";
 
 type TabId = "compound" | "mortgage" | "fire" | "tax";
@@ -106,7 +106,7 @@ function CompoundCalculator() {
       </div>
 
       <ResultCard
-        highlight={`${formatNumber(result.total)} đ`}
+        highlight={`${formatVNDShort(result.total)} đ`}
         label="Giá trị tương lai"
         breakdown={[
           { label: "💰 Tổng đóng góp", value: result.contributed, color: "duolingo-blue" },
@@ -163,7 +163,7 @@ function MortgageCalculator() {
       </div>
 
       <ResultCard
-        highlight={`${formatNumber(result.monthly)} đ/tháng`}
+        highlight={`${formatVNDShort(result.monthly)} đ/tháng`}
         label="Trả hàng tháng"
         breakdown={[
           { label: "💰 Trả trước", value: result.down, color: "duolingo-blue" },
@@ -259,19 +259,18 @@ function TaxCalculator() {
   const [insurance, setInsurance] = useState(8); // % BHXH+BHYT+BHTN NLĐ
 
   const result = (() => {
-    const deduction = 11_000_000; // giảm trừ bản thân
-    const dependentDeduction = dependents * 4_400_000; // mỗi người phụ thuộc
+    // Nghị quyết 110/2025/UBTVQH15 — áp dụng từ kỳ tính thuế 2026
+    const deduction = 15_500_000; // giảm trừ bản thân
+    const dependentDeduction = dependents * 6_200_000; // mỗi người phụ thuộc
     const insAmount = grossMonthly * (insurance / 100);
     const taxable = Math.max(0, grossMonthly - insAmount - deduction - dependentDeduction);
 
-    // Lũy tiến 7 bậc (áp dụng cho phần thu nhập tháng)
+    // Biểu thuế lũy tiến 5 bậc (Điều 9 Luật Thuế TNCN 2025 - Luật số 109/2025/QH15)
     const brackets = [
-      { upTo: 5_000_000,    rate: 0.05 },
-      { upTo: 10_000_000,   rate: 0.10 },
-      { upTo: 18_000_000,   rate: 0.15 },
-      { upTo: 32_000_000,   rate: 0.20 },
-      { upTo: 52_000_000,   rate: 0.25 },
-      { upTo: 80_000_000,   rate: 0.30 },
+      { upTo: 10_000_000,  rate: 0.05 },
+      { upTo: 30_000_000,  rate: 0.10 },
+      { upTo: 60_000_000,  rate: 0.20 },
+      { upTo: 100_000_000, rate: 0.30 },
       { upTo: Infinity,     rate: 0.35 },
     ];
 
@@ -286,7 +285,7 @@ function TaxCalculator() {
       const taxInBracket = taxableInBracket * b.rate;
       if (taxableInBracket > 0) {
         breakdown.push({
-          range: `${formatNumber(prevCap + 1)} - ${b.upTo === Infinity ? "∞" : formatNumber(b.upTo)}`,
+          range: `${formatNumber(prevCap)} - ${b.upTo === Infinity ? "∞" : formatNumber(b.upTo)}`,
           amount: taxableInBracket,
           tax: taxInBracket,
         });
@@ -305,9 +304,11 @@ function TaxCalculator() {
     <div className="space-y-3">
       <div className="duo-card">
         <h2 className="font-display text-lg font-extrabold text-duolingo-gray-5 flex items-center gap-2">
-          📋 Thuế TNCN (lũy tiến 7 bậc)
+          📋 Thuế TNCN (lũy tiến 5 bậc)
         </h2>
-        <p className="mt-1 text-xs text-duolingo-gray-3">Tính thuế thu nhập cá nhân phải đóng hàng tháng</p>
+        <p className="mt-1 text-xs text-duolingo-gray-3">
+          Theo Luật Thuế TNCN 2025 (109/2025/QH15) &amp; Nghị quyết 110/2025/UBTVQH15 — áp dụng từ kỳ tính thuế 2026
+        </p>
       </div>
 
       <div className="duo-card space-y-3">
@@ -317,7 +318,7 @@ function TaxCalculator() {
       </div>
 
       <ResultCard
-        highlight={`${formatNumber(result.tax)} đ`}
+        highlight={`${formatVNDShort(result.tax)} đ`}
         label="Thuế TNCN/tháng"
         breakdown={[
           { label: "💰 Lương gross", value: grossMonthly, color: "duolingo-gray-4" },
@@ -332,8 +333,8 @@ function TaxCalculator() {
           <div className="space-y-1 text-xs">
             {result.breakdown.map((b, i) => (
               <div key={i} className="flex justify-between">
-                <span className="text-duolingo-gray-3">{b.range}</span>
-                <span className="font-bold text-duolingo-gray-5">{formatNumber(b.tax)} đ</span>
+                <span className="text-duolingo-gray-3">{b.range} triệu đ/tháng</span>
+                <span className="font-bold text-duolingo-gray-5">{formatVNDShort(b.tax)} đ</span>
               </div>
             ))}
           </div>
@@ -345,7 +346,9 @@ function TaxCalculator() {
           <Info size={14} className="mt-0.5 flex-shrink-0 text-duolingo-purple" />
           <div>
             <b>Mẹo:</b> đóng BHXH đầy đủ để được giảm trừ + hưởng lương hưu. Đăng ký người phụ thuộc (con, bố mẹ) để giảm thuế.
-            Mức giảm trừ gia cảnh theo Luật Thuế TNCN 2024.
+            <br />
+            Mức giảm trừ gia cảnh từ 2026: <b>15,5 triệu/tháng</b> (bản thân) + <b>6,2 triệu/tháng</b> mỗi người phụ thuộc.
+            Người phụ thuộc là người có thu nhập bình quân từ 3 triệu đồng/tháng trở xuống.
           </div>
         </div>
       </div>
@@ -388,7 +391,7 @@ function ResultCard({ highlight, label, breakdown }: { highlight: string; label:
           {breakdown.map((b, i) => (
             <div key={i} className="flex justify-between text-sm">
               <span className="text-duolingo-gray-3">{b.label}</span>
-              <span className={cn("font-bold", `text-${b.color}`)}>{formatNumber(b.value)} đ</span>
+              <span className={cn("font-bold", `text-${b.color}`)}>{formatVNDShort(b.value)} đ</span>
             </div>
           ))}
         </div>
